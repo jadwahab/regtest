@@ -1,0 +1,20 @@
+FROM ubuntu:18.04
+
+RUN apt-get update
+
+RUN apt-get -y install curl
+
+RUN curl -OL https://download.bitcoinsv.io/bitcoinsv/1.0.0.beta/bitcoin-sv-1.0.0.beta-x86_64-linux-gnu.tar.gz
+
+RUN tar zxvf bitcoin-sv-1.0.0.beta-x86_64-linux-gnu.tar.gz
+
+WORKDIR /bitcoin-sv-1.0.0.beta/
+
+RUN ln -s /bitcoin-sv-1.0.0.beta/bin/bitcoin-cli /bitcoin-cli
+
+COPY bitcoin.conf /root/.bitcoin/bitcoin.conf
+
+RUN mkdir -p /root/.bitcoin/regtest
+COPY ./regtest_wallet.dat /root/.bitcoin/regtest/wallet.dat
+
+ENTRYPOINT ["./bin/bitcoind", "-regtest",  "-printtoconsole"]
