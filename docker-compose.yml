@@ -31,5 +31,3 @@ services:
     expose: 
       - "18333"
     command: [ "-addnode=node2:18333", "-addnode=node1:18333"]
-
-    curl -d '{"utxo": {"txid":"94b5c6ada76159c13b44028bde51a229ae078a04d98cb6e939abc0c3cd1f2513", "vout”:1, "scriptPubKey": "76a9146809443e06872cc9236b61ac73645013d1fe8e0088ac","satoshis":5000000000}}' -H "Content-Type: application/json" -X POST http://localhost:8003/splitting/split
