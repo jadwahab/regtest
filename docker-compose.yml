@@ -13,6 +13,7 @@ services:
       - "18333"
       - "28332"
     command: [ "-addnode=node2:18333", "-addnode=node3:18333", "-zmqpubhashblock=tcp://*:28332", "-zmqpubhashtx=tcp://*:28332"]
+
   node2:
     build:
         dockerfile: Dockerfile.dev
@@ -22,6 +23,7 @@ services:
     expose: 
       - "18333"
     command: [ "-addnode=node1:18333", "-addnode=node3:18333"]
+    
   node3:
     build:
         dockerfile: Dockerfile.dev
