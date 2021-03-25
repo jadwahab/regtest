@@ -18,7 +18,7 @@ to start all the containers. This will start the bitcoin nodes, and expose RPC o
 | ----- | ----------- | ----------- | ------------ | ------------ |
 | node1 | 18332       | 18333       | bitcoin      | bitcoin      |
 | node2 | 18501       | 18401       | bitcoin      | bitcoin      |
-| node3 | 18502       | 18402       | bitcoin      | bitcoin      |
+| node3 | 18502       | 18402       | bitcoin      | bitcoin      | 
 
 \* Port as exposed on the host running docker.
 
