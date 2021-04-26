@@ -1,9 +1,8 @@
 version: '3.7'
 services:
   node1:
-    build:
-        dockerfile: Dockerfile.dev
-        context: .
+    name: node1
+    image: 709855634846.dkr.ecr.eu-west-2.amazonaws.com/bitcoin-sv:bitcoinsv-lucent-rc1
     ports:
       - "18332:18332"
       - "18333:18333"
@@ -12,24 +11,38 @@ services:
       - "18332"
       - "18333"
       - "28332"
-    command: [ "-addnode=node2:18333", "-addnode=node3:18333", "-zmqpubhashblock=tcp://*:28332", "-zmqpubhashtx=tcp://*:28332"]
+    command: ["bitcoind", "-addnode=node2:18333", "-addnode=node3:18333", "-zmqpubhashblock=tcp://*:28332", "-zmqpubhashtx=tcp://*:28332"]
+    volumes:
+      - type: bind
+        source: ./node1.conf
+        target: /root/.bitcoin/bitcoin.conf
 
   node2:
-    build:
-        dockerfile: Dockerfile.dev
-        context: .
+    name: node2
+    image: 709855634846.dkr.ecr.eu-west-2.amazonaws.com/bitcoin-sv:bitcoinsv-lucent-rc1
     ports:
       - "18501:18333"
+      - "28338:18332"
     expose: 
       - "18333"
-    command: [ "-addnode=node1:18333", "-addnode=node3:18333"]
+      - "28338"
+    command: [bitcoind", "-addnode=node1:18333", "-addnode=node3:18333"]
+    volumes:
+      - type: bind
+        source: ./node2.conf
+        target: /root/.bitcoin/bitcoin.conf
     
   node3:
-    build:
-        dockerfile: Dockerfile.dev
-        context: .
+    name: node3
+    image: 709855634846.dkr.ecr.eu-west-2.amazonaws.com/bitcoin-sv:bitcoinsv-lucent-rc1
     ports:
       - "18502:18333"
+      - "28339:18332"
     expose: 
       - "18333"
-    command: [ "-addnode=node2:18333", "-addnode=node1:18333"]
+      - "28339"
+    command: [bitcoind", "-addnode=node1:18333", "-addnode=node3:18333"]
+    volumes:
+      - type: bind
+        source: ./node3.conf
+        target: /root/.bitcoin/bitcoin.conf
