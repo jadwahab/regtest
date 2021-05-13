@@ -14,13 +14,20 @@ docker-compose up
 
 to start all the containers. This will start the bitcoin nodes, and expose RPC on all of them. The nodes will run on the following ports:
 
-| Node  | P2P port \* | RPC port \* | RPC Username | RPC Password |
+| Node  | RPC port \* | P2P port \* | RPC Username | RPC Password |
 | ----- | ----------- | ----------- | ------------ | ------------ |
 | node1 | 18332       | 18333       | bitcoin      | bitcoin      |
-| node2 | 18501       | 18401       | bitcoin      | bitcoin      |
-| node3 | 18502       | 18402       | bitcoin      | bitcoin      |
+| node2 | 18502       | 18501       | bitcoin      | bitcoin      |
+| node3 | 18602       | 18601       | bitcoin      | bitcoin      |
 
 \* Port as exposed on the host running docker.
+
+### Connect nodes to each other
+
+```
+./regtest1.sh addnode "node2:18333" add
+./regtest1.sh addnode "node3:18333" add
+```
 
 ### Samples
 
