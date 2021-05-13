@@ -1,8 +1,8 @@
 version: '3.7'
 services:
   node1:
-    name: node1
-    image: 709855634846.dkr.ecr.eu-west-2.amazonaws.com/bitcoin-sv:bitcoinsv-lucent-rc1
+    container_name: node1
+    image: bitcoinsv/bitcoin-sv:1.0.8.beta
     ports:
       - "18332:18332"
       - "18333:18333"
@@ -11,38 +11,46 @@ services:
       - "18332"
       - "18333"
       - "28332"
-    command: ["bitcoind", "-addnode=node2:18333", "-addnode=node3:18333", "-zmqpubhashblock=tcp://*:28332", "-zmqpubhashtx=tcp://*:28332"]
+    healthcheck:
+      test: [ "CMD", "/entrypoint.sh", "bitcoin-cli", "getinfo" ]
     volumes:
-      - type: bind
-        source: ./node1.conf
-        target: /root/.bitcoin/bitcoin.conf
+      - ./config/bitcoin.conf:/data/bitcoin.conf
+      - node1-data:/data
 
   node2:
-    name: node2
-    image: 709855634846.dkr.ecr.eu-west-2.amazonaws.com/bitcoin-sv:bitcoinsv-lucent-rc1
+    container_name: node2
+    image: bitcoinsv/bitcoin-sv:1.0.8.beta
     ports:
       - "18501:18333"
-      - "28338:18332"
+      - "18502:18332"
     expose: 
+      - "18332"
       - "18333"
-      - "28338"
-    command: [bitcoind", "-addnode=node1:18333", "-addnode=node3:18333"]
+    healthcheck:
+      test: [ "CMD", "/entrypoint.sh", "bitcoin-cli", "getinfo" ]
     volumes:
-      - type: bind
-        source: ./node2.conf
-        target: /root/.bitcoin/bitcoin.conf
+      - ./config/bitcoin.conf:/data/bitcoin.conf
+      - node2-data:/data
     
   node3:
-    name: node3
-    image: 709855634846.dkr.ecr.eu-west-2.amazonaws.com/bitcoin-sv:bitcoinsv-lucent-rc1
+    container_name: node3
+    image: bitcoinsv/bitcoin-sv:1.0.8.beta
     ports:
-      - "18502:18333"
-      - "28339:18332"
+      - "18601:18333"
+      - "18602:18332"
     expose: 
+      - "18332"
       - "18333"
-      - "28339"
-    command: [bitcoind", "-addnode=node1:18333", "-addnode=node3:18333"]
+    healthcheck:
+      test: [ "CMD", "/entrypoint.sh", "bitcoin-cli", "getinfo" ]
     volumes:
-      - type: bind
-        source: ./node3.conf
-        target: /root/.bitcoin/bitcoin.conf
+      - ./config/bitcoin.conf:/data/bitcoin.conf
+      - node3-data:/data
+
+volumes:
+  node1-data:
+    external: false
+  node2-data:
+    external: false
+  node3-data:
+    external: false
